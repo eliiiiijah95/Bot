@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  bot:
+    build: .
+    container_name: telegram_bot
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - PROVIDER_TOKEN=${PROVIDER_TOKEN}
+      - CURRENCY=${CURRENCY}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    depends_on:
+      - db
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:16
+    container_name: bot_db
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
