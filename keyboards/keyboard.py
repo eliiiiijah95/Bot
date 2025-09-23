@@ -12,6 +12,17 @@ def create_inline_keyboard(*, buttons: list[tuple[str, str]] , columns: int):
     return builder.as_markup()
 
 
+def help_keyboard():
+    builder = InlineKeyboardBuilder()
+
+    buttons = [
+        ('Написать поддержке', 'https://t.me/reestrblogerov')
+    ]
+
+    for text, url in buttons:
+        builder.button(text=text, url=url)
+    return builder.as_markup()
+
 def social_media_keyboard():
     builder = InlineKeyboardBuilder()
     buttons = [

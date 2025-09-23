@@ -7,7 +7,8 @@ from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import Message, CallbackQuery, FSInputFile, LabeledPrice, PreCheckoutQuery, ReplyKeyboardRemove
+from aiogram.types import Message, CallbackQuery, FSInputFile, LabeledPrice, PreCheckoutQuery, ReplyKeyboardRemove, \
+    BotCommand
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,7 +25,7 @@ from keyboards.keyboard import (main_menu_keyboard, first_time_menu_keyboard, so
                                 profession_selection_keyboard, action_selection_keyboard, company_check_keyboard,
                                 subscription_options_keyboard, confirm_subscription_keyboard,
                                 existing_user_menu_keyboard, to_change_information, to_change_contacts, skip,
-                                confirm_conditions)
+                                confirm_conditions, help_keyboard)
 from payment import days_to_seconds, time_sub_day
 from handlers.auto_payment import create_initial_payment
 
@@ -66,10 +67,23 @@ async def cmd_start(message: Message):
     await message.reply(f'Привет, {message.from_user.first_name}. Выбери пункт ниже ⬇️',
                         reply_markup=main_menu_keyboard())
 
+
+private = [
+    BotCommand(command='menu', description='Перейти в главное меню'),
+    BotCommand(command='help', description='Написать поддержке')
+]
+
+
 @router.message(Command("menu"))
 async def cmd_menu(message: Message):
     await message.reply(f'{message.from_user.first_name}. Это главное меню ⬇️',
                         reply_markup=main_menu_keyboard())
+
+
+@router.message(Command("help"))
+async def cmd_menu(message: Message):
+    await message.reply(f'{message.from_user.first_name}. Если у вас возник вопрос или проблема, напишите поддержку',
+                        reply_markup=help_keyboard())
 
 
 @router.callback_query(F.data == 'first_time')
@@ -282,6 +296,7 @@ async def handel_buy_confirm_conditions(callback: CallbackQuery):
             f"Нажимая кнопку ниже, вы подтверждаете согласие на обработку ваших данных.",
             reply_markup=confirm_conditions()
         )
+        await rules_and_conventions()
 
     except Exception as e:
         logging.error(f"Ошибка при сохранении согласия: {e}")
@@ -466,7 +481,11 @@ async def ask_er(message: Message, state: FSMContext):
             return
 
         await state.update_data(coverages=coverages)
-        await message.answer('ER (в процентах):')
+        await message.answer('ER (в процентах): \n'
+                             'Посчитать можно здесь'
+                             'https://t.me/labelup_bot \n'
+                             '*вы несете ответственность и можете быть удалены из таблицы за предоставление ложной информации о себе'
+                             )
         await state.set_state(AddCustomer.er)
     except Exception as e:
         logging.error('Произошла ошибка при вводе охвата. Попробуйте снова.')
@@ -499,7 +518,7 @@ async def ask_telegram(message: Message, state: FSMContext):
 async def ask_vk(message: Message, state: FSMContext):
     try:
         link_to_telegram = message.text.strip()
-        telegram_pattern = r"^https://t\.me/[A-Za-z0-9_]+$"
+        telegram_pattern = r"^(https?:\/\/)?t\.me\/[A-Za-z0-9_]+$|^@[A-Za-z0-9_]+$"
         if not re.match(telegram_pattern, link_to_telegram):
             await message.answer("Пожалуйста, введите корректную ссылку на ваш Telegram. Пример: https://t.me/username.")
             return
@@ -842,10 +861,10 @@ async def questions(callback: CallbackQuery):
 
 
 @router.callback_query(F.data == 'sure')
-async def handle_buy_a_table_for_month(callback: CallbackQuery):
+async def handle_buy_monthly_table(callback: CallbackQuery):
     try:
         user_id = callback.from_user.id
-        subscription_price = 300000
+        subscription_price = 70000
         payment_url, payment_id = create_initial_payment(user_id, subscription_price, payment_type = "table")
 
         await callback.message.answer(
@@ -859,10 +878,10 @@ async def handle_buy_a_table_for_month(callback: CallbackQuery):
 
 
 @router.callback_query(F.data == 'sub_10_000')
-async def handle_buy_a_table_for_month(callback: CallbackQuery):
+async def handle_buy_lifetime_table(callback: CallbackQuery):
     try:
         user_id = callback.from_user.id
-        subscription_price = 1000000
+        subscription_price = 230000
         payment_url, payment_id = create_initial_payment(user_id, subscription_price, payment_type = "table_lifetime")
 
         await callback.message.answer(

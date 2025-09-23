@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher
 from fastapi import FastAPI
 
 from database.engine import create_db, drop_db, session_maker
-from handlers.commands import router
+from handlers.commands import router, private
 from config_reader import config
 from middelwares.db import DataBaseSession
 from webhook_server import router as webhook_router
@@ -35,7 +35,7 @@ async def main():
     polling_task = asyncio.create_task(dp.start_polling(bot))
 
     await asyncio.gather(uvicorn_task, polling_task)
-    #await bot.delete_my_commands(scope=types.BotCommandScopeAllPrivateChats())
+    await bot.set_my_commands(commands=[private])
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO) #не для прода
