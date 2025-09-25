@@ -715,7 +715,10 @@ async def save_and_finish(message: Message, state: FSMContext, session: AsyncSes
                 f"Reels: {customer_data[15]}\n"
                 f"Телефон: {customer_data[16]}\n"
                 f"Email: {customer_data[17]}\n"
-                f"Подписка: {user_sub}"
+                f"Подписка: {user_sub}\n"
+                f"✅ Анкета успешно принята! Напоминаем про период 30 дней в стоимость 1 ₽. "
+                f"Дальше будет автоматическое списание согласно условиям подписки. \n"
+                f"Если вы хотите изменить данные, то это можно сделать в меню с помощью кнопки «уже с вами»."
             )
             await message.answer(response_text)
         else:
@@ -783,9 +786,6 @@ async def user_information(callback: CallbackQuery, session: AsyncSession):
             f"Телефон: {customer_data[16]}\n"
             f"Email: {customer_data[17]}\n"
             f"Подписка: {user_sub}"
-            f"✅ Анкета успешно принята! Напоминаем про период 30 дней в стоимость 1 ₽. "
-            f"Дальше будет автоматическое списание согласно условиям подписки. \n"
-            f"Если вы хотите изменить данные, то это можно сделать в меню с помощью кнопки «уже с вами»."
         )
     else:
         response_text = "❌ Информация о вас не найдена."
