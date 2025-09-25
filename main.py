@@ -31,11 +31,13 @@ async def main():
     dp.include_router(router)
     dp.update.middleware(DataBaseSession(session_pool=session_maker))
 
+    await bot.set_my_commands(commands=private)
+
     uvicorn_task = asyncio.create_task(start_uvicorn())
     polling_task = asyncio.create_task(dp.start_polling(bot))
 
     await asyncio.gather(uvicorn_task, polling_task)
-    await bot.set_my_commands(commands=[private])
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO) #не для прода

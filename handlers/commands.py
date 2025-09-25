@@ -70,7 +70,7 @@ async def cmd_start(message: Message):
 
 private = [
     BotCommand(command='menu', description='Перейти в главное меню'),
-    BotCommand(command='help', description='Написать поддержке')
+    BotCommand(command='help', description='Написать в поддержку')
 ]
 
 
@@ -296,7 +296,8 @@ async def handel_buy_confirm_conditions(callback: CallbackQuery):
             f"Нажимая кнопку ниже, вы подтверждаете согласие на обработку ваших данных.",
             reply_markup=confirm_conditions()
         )
-        await rules_and_conventions()
+
+        await rules_and_conventions(callback)
 
     except Exception as e:
         logging.error(f"Ошибка при сохранении согласия: {e}")
@@ -741,7 +742,7 @@ async def info_table(callback: CallbackQuery, session: AsyncSession):
     await callback.answer()
     await callback.message.answer(f'Супер! Получи полную таблицу, где все в одном месте '
                                   f'для успешного развития своего бизнеса'
-                                  f' модели, блогеры, смм, фотографы, … перечисление всех '
+                                  f' модели, блогеры, смм, фотографы, видеографы и другие контент специалисты '
                                   f'Хочешь подписку или разовую покупку навсегда?',
                                   reply_markup=subscription_options_keyboard())
 
@@ -782,6 +783,9 @@ async def user_information(callback: CallbackQuery, session: AsyncSession):
             f"Телефон: {customer_data[16]}\n"
             f"Email: {customer_data[17]}\n"
             f"Подписка: {user_sub}"
+            f"✅ Анкета успешно принята! Напоминаем про период 30 дней в стоимость 1 ₽. "
+            f"Дальше будет автоматическое списание согласно условиям подписки. \n"
+            f"Если вы хотите изменить данные, то это можно сделать в меню с помощью кнопки «уже с вами»."
         )
     else:
         response_text = "❌ Информация о вас не найдена."
@@ -854,7 +858,7 @@ async def change_contacts(callback: CallbackQuery):
 @router.callback_query(F.data == 'sub_3000')
 async def questions(callback: CallbackQuery):
     await callback.answer()
-    await callback.message.answer(f'Точно хочешь подписку на 1 месяц? Выгодней купить сразу'
+    await callback.message.answer(f'Точно хочешь подписку на 1 месяц? Выгодней купить сразу '
                                   f'и иметь всегда под рукой обновляющуюся таблицу. '
                                   f'В дальнейшем с ростом таблицы будет расти и стоимость покупки 🤔',
                                   reply_markup=confirm_subscription_keyboard())
