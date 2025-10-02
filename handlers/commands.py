@@ -188,7 +188,7 @@ async def rules_and_conventions(callback: CallbackQuery):
                                              filename='rules_and_conventions.pdf')
     await callback.answer()
     await callback.message.answer_document(file_rules_and_conventions,
-                                           caption='Правила и соглашения')
+                                           caption='Правила и соглашения о пользовании реестром блогеров')
 # Переделать --------------------------------------------------------------------
 
 @router.callback_query(F.data == 'already_with_you')
@@ -297,7 +297,11 @@ async def handel_buy_confirm_conditions(callback: CallbackQuery):
             reply_markup=confirm_conditions()
         )
 
-        await rules_and_conventions(callback)
+        file_rules_and_conventions = FSInputFile(
+            'files/Правила_и_соглашения.pdf',
+            filename='rules_and_conventions.pdf')
+        await callback.message.answer_document(file_rules_and_conventions,
+                                               caption='Правила и соглашения')
 
     except Exception as e:
         logging.error(f"Ошибка при сохранении согласия: {e}")
