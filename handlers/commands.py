@@ -179,17 +179,15 @@ async def about_me(callback: CallbackQuery):
     await callback.message.answer(text,
                                   reply_markup=social_media_keyboard())
 
-# Переделать --------------------------------------------------------------------
-# Вариант 1 - через гугл драйв давать ссылку
-# Вариант 2 - через бд кидать документ
+
 @router.callback_query(F.data == 'rules_and_conventions')
 async def rules_and_conventions(callback: CallbackQuery):
     file_rules_and_conventions = FSInputFile('files/ПРАВИЛА_И_СОГЛАШЕНИЕ_О_ПОЛЬЗОВАНИИ_РЕЕСТРОМ_БЛОГЕРОВ_И_КОНТЕНТ.pdf',
-                                             filename='rules_and_conventions.pdf')
+                                             filename='terms_of_use.pdf')
     await callback.answer()
     await callback.message.answer_document(file_rules_and_conventions,
                                            caption='Правила и соглашения о пользовании реестром блогеров')
-# Переделать --------------------------------------------------------------------
+
 
 @router.callback_query(F.data == 'already_with_you')
 async def already_with_you(callback: CallbackQuery, session: AsyncSession):

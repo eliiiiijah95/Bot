@@ -16,7 +16,7 @@ def create_initial_payment(user_id, amount_rub, payment_type):
         },
         "confirmation": {
             "type": "redirect",
-            "return_url": "https://t.me/alert_for_task_bot"
+            "return_url": "https://t.me/offical_blogger_registry_bot"
         },
         "description": "Оплата подписки",
         "save_payment_method": True,
