@@ -205,10 +205,9 @@ async def already_with_you(callback: CallbackQuery, session: AsyncSession):
 @router.callback_query(F.data == 'subscription_and_conditions')
 async def sub(callback: CallbackQuery):
     await callback.answer()
-    await callback.message.answer(f'Отправляем документ с условиями подписки')
 
     file_rules_and_conventions = FSInputFile(
-        'files/Правила_и_соглашения.pdf',
+        'files/Правила_и_соглашениe.pdf',
         filename='rules_and_conventions.pdf')
     await callback.message.answer_document(file_rules_and_conventions,
                                            caption='Правила и соглашения')
