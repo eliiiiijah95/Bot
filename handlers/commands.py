@@ -207,6 +207,12 @@ async def sub(callback: CallbackQuery):
     await callback.answer()
     await callback.message.answer(f'Отправляем документ с условиями подписки')
 
+    file_rules_and_conventions = FSInputFile(
+        'files/Правила_и_соглашения.pdf',
+        filename='rules_and_conventions.pdf')
+    await callback.message.answer_document(file_rules_and_conventions,
+                                           caption='Правила и соглашения')
+
 
 def is_valid_name(name: str) -> bool:
     return re.fullmatch(r"[A-Za-zА-Яа-яЁё\s\-]{2,100}", name) is not None
@@ -295,11 +301,6 @@ async def handel_buy_confirm_conditions(callback: CallbackQuery):
             reply_markup=confirm_conditions()
         )
 
-        file_rules_and_conventions = FSInputFile(
-            'files/Правила_и_соглашения.pdf',
-            filename='rules_and_conventions.pdf')
-        await callback.message.answer_document(file_rules_and_conventions,
-                                               caption='Правила и соглашения')
 
     except Exception as e:
         logging.error(f"Ошибка при сохранении согласия: {e}")
