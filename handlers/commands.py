@@ -207,7 +207,7 @@ async def sub(callback: CallbackQuery):
     await callback.answer()
 
     file_rules_and_conventions = FSInputFile(
-        'files/Правила_и_соглашениe.pdf',
+        'files/Правила_и_соглашение.pdf',
         filename='rules_and_conventions.pdf')
     await callback.message.answer_document(file_rules_and_conventions,
                                            caption='Правила и соглашения')
