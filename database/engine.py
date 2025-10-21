@@ -1,18 +1,13 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from contextlib import asynccontextmanager
 
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.testing.plugin.plugin_base import logging
 
 from config_reader import config
 from database.models import Base
 
 
-DATABASE_URL = (
-    f"postgresql+asyncpg://{config.db_user}:{config.db_pass}"
-    f"@{config.db_host}:{config.db_port}/{config.db_name}"
-)
-
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(config.build_database_url(), echo=True)
 session_maker = async_sessionmaker(bind=engine, class_=AsyncSession)
 
 
