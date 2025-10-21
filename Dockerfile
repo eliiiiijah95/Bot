@@ -18,4 +18,4 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # 7. Точка входа — запуск монолита
-CMD ["python", "main.py"]
+CMD ["python", "-m", "cleanbot"]

@@ -1,3 +1,6 @@
 .idea/
 .env
-config_reader.py
+__pycache__/
+*.pyc
+.DS_Store
+my_base.db
